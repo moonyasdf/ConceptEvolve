@@ -1,209 +1,207 @@
 # ConceptEvolve 🧬💡
 
-**ConceptEvolve** es un framework de "ideación aumentada" que utiliza un enfoque evolutivo impulsado por LLMs para generar, refinar y diversificar conceptos algorítmicos sofisticados. Esta versión ha sido mejorada con la arquitectura robusta de [ShinkaEvolve](https://github.com/SakanaAI/ShinkaEvolve).
+**ConceptEvolve** is an "augmented ideation" framework that uses an LLM-driven evolutionary approach to generate, refine, and diversify sophisticated algorithmic concepts. This version has been enhanced with the robust architecture of [ShinkaEvolve](https://github.com/SakanaAI/ShinkaEvolve).
 
-En lugar de saltar directamente a la implementación de código, ConceptEvolve explora el "espacio de las ideas", produciendo un portafolio de documentos de diseño de alto nivel, creativos y robustos. Estos documentos sirven como un punto de partida de alta calidad para proyectos de desarrollo de software complejos, como los que se pueden implementar con frameworks como [ShinkaEvolve](https://github.com/SakanaAI/ShinkaEvolve).
+Instead of jumping directly into code implementation, ConceptEvolve explores the "idea space," producing a portfolio of high-level, creative, and robust design documents. These documents serve as a high-quality starting point for complex software development projects, such as those that can be implemented with frameworks like [ShinkaEvolve](https://github.com/SakanaAI/ShinkaEvolve).
 
- <!-- Reemplaza esto con una URL a un diagrama si lo creas -->
+ <!-- Replace this with a URL to a diagram if you create one -->
 
-## Características Principales
+## Key Features
 
--   **Generación Evolutiva de Conceptos:** Utiliza un sistema de población donde las ideas "mutan" y se "cruzan" para crear nuevas y mejores soluciones.
--   **Refinamiento Iterativo:** Cada nueva idea pasa por un ciclo de **crítica y refinamiento**, donde un agente de IA escéptico encuentra debilidades y el generador fortalece el concepto.
--   **Filtro de Novedad:** Incorpora un sistema de "muestreo por rechazo" basado en embeddings y un LLM-juez para descartar ideas redundantes y fomentar la diversidad.
--   **Evaluación de Fitness Conceptual:** Las ideas son calificadas por un "comité de programa de IA" que evalúa la novedad, el potencial, la sofisticación y la viabilidad, en lugar de solo la corrección de una ejecución.
--   **Salida Estructurada:** El resultado final no es código, sino un conjunto de **documentos de diseño** que incluyen requisitos del sistema y sub-problemas identificados.
--   **Gestión Interactiva de API Keys:** Solicita tu API key de forma segura y permite cambiarla en tiempo de ejecución si falla, evitando interrupciones.
+-   **Evolutionary Concept Generation:** Uses a population system where ideas "mutate" and "crossover" to create new and better solutions.
+-   **Iterative Refinement:** Each new idea goes through a cycle of **criticism and refinement**, where a skeptical AI agent finds weaknesses and the generator strengthens the concept.
+-   **Novelty Filter:** Incorporates an embedding-based "rejection sampling" system and an LLM-judge to discard redundant ideas and foster diversity.
+-   **Conceptual Fitness Evaluation:** Ideas are scored by an "AI program committee" that evaluates novelty, potential, sophistication, and viability, rather than just execution correctness.
+-   **Structured Output:** The final result is not code, but a set of **design documents** that include system requirements and identified sub-problems.
+-   **Interactive API Key Management:** Securely requests your API key and allows changing it at runtime if it fails, preventing interruptions.
 
-## Requisitos
+## Requirements
 
 -   Python 3.9+
--   Una **API Key de Google** para el modelo Gemini.
--   Una **API Key de OpenAI** para la generación de embeddings.
+-   A **Google API Key** for the Gemini model.
+-   An **OpenAI API Key** for embedding generation.
 
-## 🚀 Guía de Inicio Rápido
+## 🚀 Quick Start Guide
 
-### 1. Clonar el Repositorio
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/tu-usuario/conceptevolve.git
 cd conceptevolve
 ```
 
-### 2. Configurar el Entorno Virtual
+### 2. Configure the Virtual Environment
 
-Se recomienda usar un entorno virtual de Python.
+It is recommended to use a Python virtual environment.
 
 ```bash
-# Crear un entorno virtual
+# Create a virtual environment
 python -m venv .venv
 
-# Activar el entorno
-# En macOS/Linux:
+# Activate the environment
+# On macOS/Linux:
 source .venv/bin/activate
-# En Windows (CMD):
+# On Windows (CMD):
 # .venv\Scripts\activate.bat
 ```
 
-### Ejecutar ConceptEvolve con Hydra
+### Running ConceptEvolve with Hydra
 
-El script principal ahora se ejecuta a través de Hydra, lo que permite una configuración flexible desde la línea de comandos.
+The main script now runs via Hydra, allowing flexible configuration from the command line.
 
-**Sintaxis:**
+**Syntax:**
 ```bash
-python src/run.py [OPCIONES_DE_HYDRA]
+python src/run.py [HYDRA_OPTIONS]
 ```
 
-**Ejemplo Práctico:**
+**Practical Example:**
 ```bash
-# Ejecutar con la configuración por defecto (definida en configs/config.yaml)
+# Run with default configuration (defined in configs/config.yaml)
 python src/run.py
 
-# Modificar parámetros desde la línea de comandos
+# Modify parameters from the command line
 python src/run.py evolution.num_generations=20 database.num_islands=8
 
-# Reanudar desde el último checkpoint
+# Resume from the last checkpoint
 python src/run.py resume=true
 ```
 
-### Validación de la configuración de base de datos
+### Database Configuration Validation
 
-Antes de iniciar el proceso evolutivo, ConceptEvolve valida que la sección `database` de la configuración de Hydra esté completa y contenga valores válidos. Si falta algún parámetro obligatorio (por ejemplo `migration_interval`, `parent_selection_lambda` o `exploitation_ratio`) o un campo tiene un tipo fuera de rango, se lanzará un `ValueError` que indica exactamente qué parámetros deben corregirse. Asegúrate de definir todos los campos requeridos y de proporcionar números dentro de sus intervalos esperados (p.ej. tasas entre 0 y 1, tamaños positivos) cuando ajustes la configuración desde YAML o la línea de comandos.
+Before starting the evolutionary process, ConceptEvolve validates that the `database` section of the Hydra configuration is complete and contains valid values. If any required parameter is missing (e.g., `migration_interval`, `parent_selection_lambda`, or `exploitation_ratio`) or a field has an out-of-range type, a `ValueError` will be thrown indicating exactly which parameters must be corrected. Ensure you define all required fields and provide numbers within their expected ranges (e.g., rates between 0 and 1, positive sizes) when adjusting the configuration from YAML or the command line.
 
-### Visualización en Tiempo Real
+### Real-Time Visualization
 
-Al ejecutar `src/run.py`, se iniciará automáticamente un servidor web.
-- **Abre tu navegador y ve a `http://localhost:8000`** para monitorear el progreso de la evolución en tiempo real.
-- El panel mostrará el árbol genealógico de ideas, y al hacer clic en un nodo, verás su descripción, puntuaciones e historial de críticas.
+When running `src/run.py`, a web server will automatically start.
+- **Open your browser and navigate to `http://localhost:8000`** to monitor the evolution progress in real-time.
+- The dashboard will show the idea genealogy tree, and clicking on a node will display its description, scores, and criticism history.
 
-### 3. Instalar Dependencias
+### 3. Install Dependencies
 
-Instala todos los paquetes necesarios con un solo comando:
+Install all necessary packages with a single command:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configurar las API Keys
+### 4. Configure API Keys
 
-El sistema necesita acceso a las APIs de Google y OpenAI.
+The system needs access to Google and OpenAI APIs.
 
--   **API Key de Google (Gemini):** El programa te la pedirá interactivamente la primera vez que lo ejecutes. También puedes configurarla como una variable de entorno para evitar que te la pida cada vez:
+-   **Google API Key (Gemini):** The program will ask for it interactively the first time you run it. You can also configure it as an environment variable to prevent it from asking every time:
     ```bash
-    export GOOGLE_API_KEY="tu_api_key_de_google"
+    export GOOGLE_API_KEY="your_google_api_key"
     ```
--   **API Key de OpenAI (Embeddings):** Debes configurarla como una variable de entorno.
+-   **OpenAI API Key (Embeddings):** You must configure this as an environment variable.
     ```bash
-    export OPENAI_API_KEY="tu_api_key_de_openai"
+    export OPENAI_API_KEY="your_openai_api_key"
     ```
-    Puedes añadir estas líneas a tu fichero `~/.bashrc` o `~/.zshrc` para que estén disponibles en todas tus sesiones de terminal.
+    You can add these lines to your `~/.bashrc` or `~/.zshrc` file so they are available in all your terminal sessions.
 
-### 5. Ejecutar ConceptEvolve
+### 5. Run ConceptEvolve
 
-El script principal es `run.py`. Debes ejecutarlo desde la raíz del proyecto y proporcionarle la descripción del problema que quieres resolver.
+The main script is `run.py`. You must run it from the project root and provide the description of the problem you want to solve.
 
-**Sintaxis:**
+**Syntax:**
 
 ```bash
-python run.py --problem "DESCRIPCIÓN_DEL_PROBLEMA" [OPCIONES]
+python run.py --problem "PROBLEM_DESCRIPTION" [OPTIONS]
 ```
 
-**Ejemplo Práctico:**
+**Practical Example:**
 
-Vamos a pedirle a `ConceptEvolve` que genere ideas para un sistema avanzado de RAG (Retrieval-Augmented Generation).
+Let's ask `ConceptEvolve` to generate ideas for an advanced RAG (Retrieval-Augmented Generation) system.
 
 ```bash
 python run.py \
-    --problem "Diseñar un sistema de RAG de última generación para el benchmark MuSiQue, que requiere razonamiento en múltiples pasos. El sistema debe ser capaz de descomponer preguntas complejas, realizar búsquedas de información de manera iterativa y sintetizar respuestas coherentes a partir de fragmentos de evidencia distribuidos en múltiples documentos." \
+    --problem "Design a next-generation RAG system for the MuSiQue benchmark, which requires multi-step reasoning. The system must be capable of decomposing complex questions, performing iterative information retrieval, and synthesizing coherent answers from evidence fragments distributed across multiple documents." \
     --generations 15 \
     --population 25 \
     --output_dir "musique_rag_concepts"
 ```
 
-**Argumentos:**
+**Arguments:**
 
--   `--problem` (obligatorio): La descripción del problema. Intenta ser lo más detallado posible.
--   `--generations` (opcional): Número de ciclos evolutivos a ejecutar. (Por defecto: 10)
--   `--population` (opcional): Tamaño de la población de ideas que se mantiene en cada generación. (Por defecto: 20)
--   `--output_dir` (opcional): Carpeta donde se guardarán los resultados. (Por defecto: `concept_results`)
+-   `--problem` (required): The description of the problem. Try to be as detailed as possible.
+-   `--generations` (optional): Number of evolutionary cycles to run. (Default: 10)
+-   `--population` (optional): Size of the idea population maintained in each generation. (Default: 20)
+-   `--output_dir` (optional): Folder where results will be saved. (Default: `concept_results`)
 
-### 6. Revisar los Resultados
+### 6. Reviewing the Results
 
-Una vez que el proceso finalice, encontrarás los resultados en el directorio de salida especificado (ej. `musique_rag_concepts/`).
+Once the process is complete, you will find the results in the specified output directory (e.g., `musique_rag_concepts/`).
 
--   `final_population.json`: Un fichero JSON que contiene todos los conceptos generados y evaluados durante el proceso, ordenados por su puntuación final.
--   `top_1_concept_... .txt`, `top_2_concept_... .txt`, etc.: Documentos de diseño detallados para los 5 mejores conceptos, listos para ser analizados o utilizados como base para una implementación.
+-   `final_population.json`: A JSON file containing all concepts generated and evaluated during the process, sorted by their final score.
+-   `top_1_concept_... .txt`, `top_2_concept_... .txt`, etc.: Detailed design documents for the top 5 concepts, ready to be analyzed or used as a basis for implementation.
 
-## ¿Cómo Funciona?
+## How It Works
 
-`ConceptEvolve` simula un proceso de investigación y desarrollo a nivel conceptual.
+`ConceptEvolve` simulates a conceptual-level research and development process.
 
-1.  **Población Inicial:** Un agente de IA genera un conjunto inicial de ideas diversas.
-2.  **Bucle Evolutivo:**
-    -   **Selección:** Se seleccionan las ideas "padre" más prometedoras (basado en una combinación de rendimiento y novedad).
-    -   **Generación:** Se crean nuevas ideas "hijas" a través de "mutaciones" (refinamientos) y "crossovers" (combinaciones) de las ideas padre e inspiraciones.
-    -   **Refinamiento:** Cada nueva idea es "criticada" por un agente de IA escéptico. El generador original refina la idea para abordar las críticas, fortaleciéndola.
-    -   **Evaluación y Archivo:** Las ideas refinadas y novedosas son evaluadas, puntuadas y añadidas a la población, reemplazando a las menos prometedoras.
-3.  **Salida:** El proceso se repite durante varias "generaciones", y al final se presentan los conceptos más evolucionados.
+1.  **Initial Population:** An AI agent generates an initial set of diverse ideas.
+2.  **Evolutionary Loop:**
+    -   **Selection:** The most promising "parent" ideas are selected (based on a combination of fitness and novelty).
+    -   **Generation:** New "child" ideas are created through "mutations" (refinements) and "crossovers" (combinations) of parent ideas and inspirations.
+    -   **Refinement:** Each new idea is "criticized" by a skeptical AI agent. The original generator refines the idea to address the criticisms, strengthening it.
+    -   **Evaluation and Archiving:** Refined and novel ideas are evaluated, scored, and added to the population, replacing the less promising ones.
+3.  **Output:** The process is repeated for several "generations," and the most evolved concepts are presented at the end.
 
+## 🚀 New Features (v2.0)
 
-## 🚀 Nuevas Características (v2.0)
+- **🚀 Robust Architecture:** Powered by Hydra configuration and a persistent SQLite database for scalability and reproducibility.
+- **🏝️ Island Model:** Maintains conceptual diversity through sub-populations that evolve in parallel and share ideas.
+- **🎲 Dynamic Mutation Strategies:** Uses multiple prompt "personalities" to guide the LLM toward more varied approaches.
+- **🎨 Real-Time Visualization:** An interactive web server displays the idea tree and its details as they are generated.
+- **🧠 Enhanced Gemini API:** Uses `response_schema` for robust parsing and the `thinking_config` function of `gemini-2.5-pro` for higher-quality reasoning.
 
-- **🚀 Arquitectura Robusta:** Potenciado por la configuración Hydra y una base de datos SQLite persistente para escalabilidad y reproducibilidad.
-- **🏝️ Modelo de Islas:** Mantiene la diversidad conceptual mediante sub-poblaciones que evolucionan en paralelo y comparten ideas.
-- **🎲 Estrategias de Mutación Dinámicas:** Utiliza múltiples "personalidades" de prompts para guiar al LLM hacia enfoques más variados.
-- **🎨 Visualización en Tiempo Real:** Un servidor web interactivo muestra el árbol de ideas y sus detalles a medida que se generan.
-- **🧠 API de Gemini Mejorada:** Utiliza `response_schema` para un parsing robusto y la función `thinking_config` de `gemini-2.5-pro` para un razonamiento de mayor calidad.
+### Performance Improvements
+- **⚡ Parallel Evaluation:** Asynchronous processing of concepts (5-10x faster)
+- **💾 Smart Caching:** Caching system for LLM responses (avoids redundant calls)
+- **🔍 FAISS Indexing:** O(log n) vector search instead of O(n)
 
-### Mejoras de Rendimiento
-- **⚡ Evaluación Paralela:** Procesamiento asíncrono de conceptos (5-10x más rápido)
-- **💾 Caché Inteligente:** Sistema de caché para respuestas LLM (evita llamadas redundantes)
-- **🔍 Indexación FAISS:** Búsqueda vectorial O(log n) en lugar de O(n)
+### Accuracy Improvements
+- **📚 Improved Prompts:** Few-shot learning with high-quality examples
+- **📊 Adaptive Scoring:** Z-score normalization and dynamic weights per generation
+- **🎯 Alignment Validation:** Verifies that solutions genuinely address the problem
+- **🧬 Multiobjective Selection:** Balances between fitness and diversity (NSGA-II inspired)
+- **🔄 Contextual Refinement:** Tracks addressed points across iterations
 
-### Mejoras de Precisión
-- **📚 Prompts Mejorados:** Few-shot learning con ejemplos de alta calidad
-- **📊 Scoring Adaptativo:** Normalización z-score y pesos dinámicos por generación
-- **🎯 Validación de Alineación:** Verifica que soluciones realmente aborden el problema
-- **🧬 Selección Multiobjetivo:** Balance entre fitness y diversidad (NSGA-II inspired)
-- **🔄 Refinamiento Contextual:** Tracking de puntos abordados en iteraciones
+### Robustness Improvements
+- **💾 Automatic Checkpointing:** Saves progress every N generations
+- **🔄 Resume Mode:** Continues from the last checkpoint with `--resume`
+- **🛡️ Robust Parsing:** Uses native Gemini Structured Output
+- **📝 Detailed Logging:** Complete traceability of the process
 
-### Mejoras de Robustez
-- **💾 Checkpointing Automático:** Guarda progreso cada N generaciones
-- **🔄 Modo Reanudar:** Continúa desde último checkpoint con `--resume`
-- **🛡️ Parsing Robusto:** Usa Structured Output nativo de Gemini
-- **📝 Logging Detallado:** Trazabilidad completa del proceso
-
-### Nuevos Parámetros CLI
+### New CLI Parameters
 
 ```bash
-# Reanudar desde checkpoint
+# Resume from checkpoint
 python src/run.py problema.txt --resume
 
-# Ajustar configuración de novedad
+# Adjust novelty configuration
 python src/run.py problema.txt --novelty-threshold 0.90 --refinement-steps 3
 
-# Controlar frecuencia de checkpoints
+# Control checkpoint frequency
 python src/run.py problema.txt --checkpoint-interval 10
 ```
 
-### Variables de Entorno Configurables
+### Configurable Environment Variables
 
 ```bash
-# Modelo a usar (gemini-2.5-pro o gemini-2.0-flash-exp)
+# Model to use (gemini-2.5-pro or gemini-2.0-flash-exp)
 export GEMINI_MODEL="gemini-2.5-pro"
 
-# Temperaturas por tipo de tarea
-export GEMINI_TEMP_GEN="1.0"    # Generación (máxima creatividad)
-export GEMINI_TEMP_EVAL="0.3"   # Evaluación (consistencia)
-export GEMINI_TEMP_CRIT="0.5"   # Crítica
-export GEMINI_TEMP_REF="0.7"    # Refinamiento
+# Temperatures by task type
+export GEMINI_TEMP_GEN="1.0"    # Generation (maximum creativity)
+export GEMINI_TEMP_EVAL="0.3"   # Evaluation (consistency)
+export GEMINI_TEMP_CRIT="0.5"   # Criticism
+export GEMINI_TEMP_REF="0.7"    # Refinement
 
-# Configuración de thinking (solo gemini-2.5-pro)
+# Thinking configuration (gemini-2.5-pro only)
 export GEMINI_USE_THINKING="true"
-export GEMINI_THINKING_BUDGET="-1"  # -1 = dinámico, 0 = off, 128-32768 = fijo
+export GEMINI_THINKING_BUDGET="-1"  # -1 = dynamic, 0 = off, 128-32768 = fixed
 ```
 
+## Contributions
 
-## Contribuciones
-
-Este es un proyecto en desarrollo. Las contribuciones, reportes de errores y sugerencias son bienvenidas. Por favor, abre un "Issue" en GitHub para discutir cualquier cambio.
+This is a project in development. Contributions, bug reports, and suggestions are welcome. Please open an "Issue" on GitHub to discuss any changes.
