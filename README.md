@@ -2,7 +2,7 @@
 
 **ConceptEvolve** is an "augmented ideation" framework that uses an LLM-driven evolutionary approach to generate, refine, and diversify sophisticated algorithmic concepts. This version has been enhanced with the robust architecture of [ShinkaEvolve](https://github.com/SakanaAI/ShinkaEvolve).
 
-Instead of jumping directly into code implementation, ConceptEvolve explores the "idea space," producing a portfolio of high-level, creative, and robust design documents. These documents serve as a high-quality starting point for complex software development projects, such as those that can be implemented with frameworks like [ShinkaEvolve](https://github.com/SakanaAI/ShinkaEvolve).
+> Instead of jumping directly into code implementation, ConceptEvolve explores the "idea space," producing a portfolio of high-level, creative, and robust design documents. These documents serve as a high-quality starting point for complex software development projects, such as those that can be implemented with frameworks like [ShinkaEvolve](https://github.com/SakanaAI/ShinkaEvolve).
 
  <!-- Replace this with a URL to a diagram if you create one -->
 
