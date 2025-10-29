@@ -66,6 +66,7 @@ class AlgorithmicConcept(BaseModel):
     generation: int = Field(default=0)
     parent_id: Optional[str] = Field(default=None)
     inspiration_ids: List[str] = Field(default_factory=list)
+    island_idx: Optional[int] = Field(default=None)
     embedding: List[float] = Field(default_factory=list)
     
     # Puntuaciones de fitness
