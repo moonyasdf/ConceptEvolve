@@ -1,0 +1,19 @@
+# Core - Google GenAI SDK (Oficial)
+google-genai
+
+# Procesamiento numérico y ML
+numpy
+scikit-learn
+
+# Utilidades
+tqdm
+pydantic
+hydra-core==1.3.2  # MEJORA: Añadido para configuración
+markdown             # MEJORA: Añadido para visualización
+
+# Indexación vectorial (MEJORA #3)
+faiss-cpu
+
+# Cliente OpenAI opcional (solo para embeddings alternativos)
+openai
+markdown

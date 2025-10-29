@@ -1,0 +1,54 @@
+### **Problem MQR-X: Axiomatic Design for Second-Generation Multihop RAG**
+
+**Tags:** `RAG Architecture`, `First Principles Thinking`, `System Design`, `Multihop Reasoning`
+
+### I. Preamble: The RAG Architect's Burden
+
+The first generation of Retrieval-Augmented Generation (RAG) systems has reached a conceptual plateau. While techniques like query decomposition, reranking, and hybrid search have yielded incremental gains, they remain palliative measures addressing the symptoms—not the cause—of a fundamental architectural flaw: **Knowledge Fragmentation**. We break documents into context-starved chunks and then expend immense query-time resources in a Sisyphean effort to reconstitute their original coherence.
+
+This challenge is not an invitation to merely combine or refine existing techniques. It is a demand for a paradigm shift. We seek a "second-generation" RAG architecture, designed from **first principles**, that treats the structural and relational integrity of information not as an afterthought to be repaired, but as a primary attribute to be preserved and leveraged.
+
+The litmus test for this new architecture is the **MuSiQue benchmark**, a crucible designed to incinerate systems that rely on "shortcuts" and **Disconnected Reasoning**. A proposed solution will be judged not on its superficial sophistication, but on its axiomatic soundness and its structural inability to "cheat."
+
+### II. The Axioms of a Second-Generation RAG System
+
+Any proposed architecture MUST adhere to the following non-negotiable axioms:
+
+1.  **Axiom of Zero-Shot Operation:** The system must be fully operational using only **pre-trained, general-purpose models** (LLMs, embedding models, cross-encoders). Solutions requiring any form of fine-tuning, adaptation, or training of specialized models (e.g., query decomposers, relation extractors, graph neural networks) are explicitly disqualified. The intelligence must reside in the architecture, not in task-specific model training.
+
+2.  **Axiom of Scalability:** The architecture's ingestion and retrieval mechanisms must be theoretically capable of handling knowledge corpuses of arbitrary size, far exceeding the context window of any single model. Solutions that rely on processing an entire document in a single pass are considered fundamentally unsound for a general-purpose system.
+
+3.  **Axiom of Principled Reasoning:** The system must demonstrate, by its very design, a mechanism that enforces **Connected Reasoning**. The flow of information from one reasoning hop to the next must be a structural necessity of the retrieval algorithm, not an emergent property of a high-level "agentic" LLM.
+
+### III. A Critique of the Status Quo: Approaches Deemed Insufficient
+
+A proposed solution must demonstrate a clear evolution beyond the conceptual limitations of current paradigms. Simply proposing a more complex version of the following is insufficient:
+
+*   **The "More of the Same" Fallacy (e.g., Advanced Multi-Query):** While useful, query transformations are reactive, query-time patches. They do not address the fundamental poverty of the underlying data representation.
+*   **The "Brittle Graph" Fallacy (e.g., Naive GraphRAG):** Extracting explicit `(subject, relation, object)` triplets from unstructured text is a notoriously error-prone process that creates noisy, unreliable graphs. A second-generation system must find a more robust way to represent relationships.
+*   **The "Agentic Oracle" Fallacy:** As previously stated, delegating the core reasoning process to a high-latency, high-cost LLM in an unconstrained loop is not an architectural solution; it is an abdication of architectural responsibility. The challenge is to design the *scaffolding* that makes the LLM's final synthesis step trivial, not to ask the LLM to build the scaffolding itself at query time.
+*   **The "Legacy Model" Fallacy:** Solutions must not rely on older model architectures (e.g., T5, BART-based planners) for core logic unless a rigorous justification is provided for why their specific properties are uniquely suited to a task in a way that modern, more capable models are not. The default assumption should be the use of state-of-the-art foundation models.
+
+### IV. The Grand Challenge: Your Task
+
+You are an AI Architect tasked with designing a novel, second-generation RAG system that axiomatically solves the multihop reasoning problem as defined by the MuSiQue benchmark. Your proposal must be a detailed, implementable blueprint.
+
+Your response must provide the following:
+
+1.  **Core Architectural Philosophy:** Begin with a concise (1-2 paragraph) articulation of your system's central design philosophy. What is the fundamental flaw you have identified in first-generation RAG, and what is the core principle of your proposed solution that addresses it?
+
+2.  **Ingestion Architecture ("The Knowledge Representation"):**
+    *   Describe the end-to-end process of transforming a raw document into its final, queryable state.
+    *   Detail the **data structures** created. Go beyond a simple list of chunks. How is hierarchy, position, and, most critically, **inter-chunk/inter-section relationships** represented?
+    *   Justify your representation. Why is it more robust than a naive knowledge graph? How does it prepare the system for connected reasoning *before* a query is ever asked?
+
+3.  **Retrieval Algorithm ("The Reasoning Process"):**
+    *   Provide a step-by-step algorithm for the query-time process. This must be a **concrete algorithm**, not a high-level prompt.
+    *   Explain how this algorithm **mechanically enforces connected reasoning**. How does it use the data structures from your ingestion phase to follow a logical chain of evidence?
+    *   How does this algorithm remain efficient and avoid the high latency of "agentic loops"? If you use a smaller model for intermediate steps, you must justify this choice and explain how it operates without fine-tuning.
+
+4.  **A Critical Self-Analysis:**
+    *   **Justification against MuSiQue:** Explicitly map your architectural components to each of MuSiQue's challenges (Connected Reasoning, Distractor Resilience, Unanswerability), arguing why your design is structurally superior.
+    *   **Anticipate the Weakest Link:** No architecture is perfect. Identify the single most likely point of failure or bottleneck in your proposed system. Propose a specific, practical mechanism to mitigate this weakness. This is a test of architectural humility and foresight.
+
+Your solution will be judged not on the novelty of its individual components, but on the **elegance and robustness of their synthesis**. The goal is a system that is not merely a collection of RAG "tricks," but a principled, coherent, and defensible piece of engineering.

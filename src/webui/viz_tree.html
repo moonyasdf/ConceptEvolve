@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>ConceptEvolve - Visualización</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; display: flex; height: 100vh; margin: 0; background: #f0f2f5; }
+        #tree-container { flex: 1; height: 100%; overflow: hidden; position: relative; }
+        #details-panel { width: 40%; max-width: 600px; height: 100%; overflow-y: auto; background: #fff; box-shadow: -2px 0 5px rgba(0,0,0,0.1); padding: 20px; box-sizing: border-box; }
+        .node circle { stroke: #3498db; stroke-width: 2px; transition: all 0.2s; }
+        .node.selected > circle { fill: #f1c40f; stroke: #f39c12; stroke-width: 3px; }
+        .node:hover > circle { r: 12; }
+        .link { fill: none; stroke: #bdc3c7; stroke-width: 1.5px; }
+        .link.best-path { stroke: #e67e22; stroke-width: 3px; }
+        #details-panel h3 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
+        #details-panel h4 { color: #34495e; margin-top: 20px; }
+        pre { background: #ecf0f1; padding: 10px; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div id="tree-container"></div>
+    <div id="details-panel">
+        <h3>Detalles del Concepto</h3>
+        <p>Selecciona un nodo del árbol para ver sus detalles.</p>
+    </div>
+
+<script>
+    let treeData = [];
+    let bestNodeId = null;
+    let bestPathIds = new Set();
+    const width = document.getElementById('tree-container').clientWidth;
+    const height = document.getElementById('tree-container').clientHeight;
+
+    const svg = d3.select("#tree-container").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .call(d3.zoom().on("zoom", (event) => g.attr("transform", event.transform)))
+        .append("g");
+    
+    const g = svg.append("g");
+
+    function renderGraph(data) {
+        if (!data || data.length === 0) return;
+
+        // Limpiar el gráfico anterior
+        g.selectAll("*").remove();
+        
+        const nodes = data.map(d => ({...d}));
+        const nodeMap = new Map(nodes.map(node => [node.id, node]));
+
+        const rootNodes = nodes.filter(n => !n.parent_id || !nodeMap.has(n.parent_id));
+        const virtualRootId = '___virtual_root___';
+        if (rootNodes.length > 1) {
+            nodes.push({ id: virtualRootId, parent_id: '', title: 'ROOT', generation: -1 });
+            rootNodes.forEach(rn => { rn.parent_id = virtualRootId; });
+        }
+        
+        const root = d3.stratify().id(d => d.id).parentId(d => d.parent_id)(nodes);
+        root.sort((a, b) => a.data.generation - b.data.generation);
+
+        const treeLayout = d3.tree().nodeSize([80, 150]);
+        treeLayout(root);
+
+        // Encontrar el mejor nodo y su ruta
+        const correctNodes = data.filter(d => d.combined_score > 0);
+        if (correctNodes.length > 0) {
+            const bestNode = correctNodes.reduce((best, current) => (current.combined_score > best.combined_score) ? current : best);
+            bestNodeId = bestNode.id;
+            bestPathIds.clear();
+            let currentNode = bestNode;
+            while (currentNode) {
+                bestPathIds.add(currentNode.id);
+                currentNode = nodeMap.get(currentNode.parent_id);
+            }
+        }
+
+        // Dibujar enlaces
+        g.append("g").selectAll("path")
+            .data(root.links().filter(d => !d.source.data.isVirtual))
+            .join("path")
+            .attr("class", d => (bestPathIds.has(d.source.data.id) && bestPathIds.has(d.target.data.id)) ? "link best-path" : "link")
+            .attr("d", d3.linkVertical().x(d => d.x).y(d => d.y));
+
+        // Dibujar nodos
+        const node = g.append("g").selectAll("g")
+            .data(root.descendants().filter(d => !d.data.isVirtual))
+            .join("g")
+            .attr("class", "node")
+            .attr("transform", d => `translate(${d.x},${d.y})`)
+            .on("click", (event, d) => {
+                d3.selectAll('.node').classed('selected', false);
+                d3.select(event.currentTarget).classed('selected', true);
+                displayNodeDetails(d.data);
+            });
+
+        const scores = data.map(d => d.combined_score).filter(s => s != null);
+        const colorScale = d3.scaleSequential(d3.interpolateViridis).domain(d3.extent(scores));
+
+        node.append("circle")
+            .attr("r", 10)
+            .attr("fill", d => d.data.combined_score != null ? colorScale(d.data.combined_score) : "#ccc");
+
+        node.append("text")
+            .attr("dy", "0.31em")
+            .attr("y", 20)
+            .attr("text-anchor", "middle")
+            .text(d => `G${d.data.generation}`)
+            .clone(true).lower()
+            .attr("stroke", "white");
+    }
+
+    function displayNodeDetails(nodeData) {
+        const panel = document.getElementById('details-panel');
+        let scoresHtml = '<h4>Scores</h4><p>Not evaluated.</p>';
+        if (nodeData.scores) {
+            scoresHtml = `
+                <h4>Scores</h4>
+                <p><strong>Novelty:</strong> ${nodeData.scores.novelty.toFixed(2)}</p>
+                <p><strong>Potential:</strong> ${nodeData.scores.potential.toFixed(2)}</p>
+                <p><strong>Sophistication:</strong> ${nodeData.scores.sophistication.toFixed(2)}</p>
+                <p><strong>Feasibility:</strong> ${nodeData.scores.feasibility.toFixed(2)}</p>
+                <p><strong>Combined Score:</strong> ${nodeData.combined_score ? nodeData.combined_score.toFixed(2) : 'N/A'}</p>
+            `;
+        }
+
+        let critiquesHtml = '<h4>Critique History</h4>';
+        if (nodeData.critique_history && nodeData.critique_history.length > 0) {
+            nodeData.critique_history.forEach((critique, i) => {
+                critiquesHtml += `<h5>Round ${i + 1}</h5><pre>${escapeHtml(critique)}</pre>`;
+            });
+        } else {
+            critiquesHtml += '<p>No critiques yet.</p>';
+        }
+
+        panel.innerHTML = `
+            <h3>${escapeHtml(nodeData.title)}</h3>
+            <p><strong>Generation:</strong> ${nodeData.generation}</p>
+            <p><strong>ID:</strong> ${escapeHtml(nodeData.id)}</p>
+            <h4>Description</h4>
+            <div style="white-space: pre-wrap; background: #f5f5f5; padding: 10px; border-radius: 5px;">${escapeHtml(nodeData.description)}</div>
+            ${scoresHtml}
+            ${critiquesHtml}
+        `;
+    }
+
+    function escapeHtml(text) {
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function fetchData() {
+        fetch('/get_programs')
+            .then(response => response.json())
+            .then(data => {
+                if (JSON.stringify(data) !== JSON.stringify(treeData)) {
+                    treeData = data;
+                    renderGraph(data);
+                }
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchData();
+        setInterval(fetchData, 5000);
+    });
+</script>
+</body>
+</html>

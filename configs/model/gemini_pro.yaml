@@ -1,0 +1,13 @@
+# Configuración del modelo de Gemini
+name: "gemini-2.5-pro"
+embedding_model: "text-embedding-004"
+
+# Temperaturas por tarea
+temp_generation: 1.0
+temp_evaluation: 0.3
+temp_critique: 0.5
+temp_refinement: 0.7
+
+# Configuración de "Thinking"
+use_thinking: true
+thinking_budget: -1 # -1 para dinámico

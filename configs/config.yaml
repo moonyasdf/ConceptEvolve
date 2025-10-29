@@ -1,0 +1,21 @@
+defaults:
+  - _self_
+  - evolution: default
+  - database: default
+  - model: gemini_pro
+
+# Nombre del directorio de salida para los resultados
+output_dir: "outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}"
+
+# Directorio para los checkpoints
+checkpoint_dir: "checkpoints"
+
+# Archivo con la descripción del problema
+problem_file: "src/mi_problema.txt"
+
+# Flag para reanudar desde el último checkpoint
+resume: false
+
+hydra:
+  run:
+    dir: ${output_dir}
